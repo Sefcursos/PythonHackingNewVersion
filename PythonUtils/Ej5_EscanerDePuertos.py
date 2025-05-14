@@ -1,7 +1,17 @@
+## SCRIPT DE USO EDUCATIVO ##
+# DESARROLLO DE UN ESCÁNER DE PUERTOS CON INTERFAZ GRÁFICA Y ESCANEO MULTIHILO PARA CURSO DE HACKING ÉTICO. TODA ESTA INFORMACIÓN ES DE MANERA EDUCATIVA.
+
 import socket # Permite crear conexiones de red y escanear puertos.
 import platform # Detecta el sistema operativo (Windows, Linux...).
 import subprocess # Ejecuta comandos del sistema para obtener la IP local.
 import time # Usado para pausas y barra de progreso
+import threading
+import tkinter as tk
+from tkinter import ttk, messagebox
+import queue
+import re
+import locale
+
 
 # Diccionario con puertos comunes asociados a vulnerabilidades o malas prácticas de seguridad
 puertos_vulnerables = {
@@ -29,12 +39,19 @@ def obtener_ip_local():
         resultado = subprocess.check_output("hostname -I", shell=True)
         return resultado.decode().split()[0]
 
+def validar_ip(ip):
+    patron = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    if patron.match(ip):
+        partes = ip.split(".")
+        return all(0 <=)
+
+
 # Función imprime una barra de progreso tipo [####------] 40%
-def mostrar_barra(progreso, total, largo=30):
-    porcentaje = progreso / total
-    completado = int(porcentaje * largo)
-    barra = "#" * completado + "-" * (largo - completado)
-    print(f"\r[ {barra} ] {porcentaje *100:.1f}% ", end="")
+# def mostrar_barra(progreso, total, largo=30):
+#     porcentaje = progreso / total
+#     completado = int(porcentaje * largo)
+#     barra = "#" * completado + "-" * (largo - completado)
+#     print(f"\r[ {barra} ] {porcentaje *100:.1f}% ", end="")
 
 # Función encargada de ejecutar el escaneo de puertos
 def escaner_de_puertos(ip, rango=(1, 100)):

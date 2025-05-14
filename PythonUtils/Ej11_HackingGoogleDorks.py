@@ -2,8 +2,8 @@
 import requests
 
 # Constantes para configurar la API de búsqueda personaliza
-API_KEY_GOOGLE = "AIzaSyDkMrOHobXQx4u-lPvtr7T5cPQ-S0Oya-E"
-SEARCH_ENGINE_ID = "f23bd4f9471f44b4d"
+API_KEY_GOOGLE = ""
+SEARCH_ENGINE_ID = ""
 
 # Configuración de la consulta y parametros de busqueda
 query = 'filetype:sql "MySQL dump" (pass|password|passwd|pwd)'
