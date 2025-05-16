@@ -79,7 +79,7 @@ def analizar():
 # Inferfaz Tkinter
 ventana = tkinter.Tk()
 ventana.title("Verificador de contraseña")
-ventana.geometry("400x300")
+ventana.geometry("500x400")
 ventana.resizable(False, False)
 
 tkinter.Label(ventana, text="Ingresa una contraseña:", font=("Arial", 12)).pack(pady=10)

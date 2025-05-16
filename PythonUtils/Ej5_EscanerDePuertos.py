@@ -12,7 +12,6 @@ import queue # Para comunicación segura entre hilos (usamos una cola de resulta
 import re # Expresiones regulares para validar la IP.
 import locale # Para obtener IP local según el sistema operativo.
 
-from PythonUtils.Ej2_VerificadorDeFuerzaDeContraseña import resultado
 
 # Diccionario con puertos comunes asociados a vulnerabilidades o malas prácticas de seguridad
 puertos_vulnerables = {
@@ -50,8 +49,8 @@ def validar_ip(ip):
 class EscanerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Escáner de Puertos GUI Multihilo")
-        self.root.geometry("600x450")
+        self.root.title("Escáner de Puertos con GUI Multihilo y Resolución de Dominio")
+        self.root.geometry("650x450")
         self.queue_resultados = queue.Queue()
         self.crear_interfaz()
 
@@ -92,32 +91,32 @@ class EscanerGUI:
         self.texto_resultado = tk.Text(self.root, height=15)
         self.texto_resultado.pack(pady=10, padx=10)
 
-        def usar_ip_local(self):
-            ip = obtener_ip_local()
-            self.entry_ip.delete(0, tk.END)
-            self.entry_ip.insert(0, ip)
+    def usar_ip_local(self):
+        ip = obtener_ip_local()
+        self.entry_ip.delete(0, tk.END)
+        self.entry_ip.insert(0, ip)
 
-        def iniciar_escaneo(self):
-            ip = self.entry_ip.get().strip()
-            if not validar_ip(ip):
-                messagebox.showerror("Error", "IP inválida")
-                return
+    def iniciar_escaneo(self):
+        ip = self.entry_ip.get().strip()
+        if not validar_ip(ip):
+            messagebox.showerror("Error", "IP inválida")
+            return
 
-            try:
-                puerto_inicio = int(self.entry_inicio.get())
-                puerto_fin = int(self.entry_fin.get())
-                if not (0 < puerto_inicio <= puerto_fin <= 65535):
-                    raise ValueError
-            except ValueError:
-                messagebox.showerror("Error", "Rango de puertos inválido.")
-                return
+        try:
+            puerto_inicio = int(self.entry_inicio.get())
+            puerto_fin = int(self.entry_fin.get())
+            if not (0 < puerto_inicio <= puerto_fin <= 65535):
+                raise ValueError
+        except ValueError:
+            messagebox.showerror("Error", "Rango de puertos inválido.")
+            return
 
-            self.texto_resultado.delete("1.0", tk.END)
-            self.progress["maximum"] = puerto_fin - puerto_inicio + 1
-            self.progress["value"] = 0
+        self.texto_resultado.delete("1.0", tk.END)
+        self.progress["maximum"] = puerto_fin - puerto_inicio + 1
+        self.progress["value"] = 0
 
-            threading.Thread(target=self.escanear_puertos, args=(ip, puerto_inicio, puerto_fin), daemon=True).start()
-            self.root.after(100, self.actualizar_resultados)
+        threading.Thread(target=self.escanear_puertos, args=(ip, puerto_inicio, puerto_fin), daemon=True).start()
+        self.root.after(100, self.actualizar_resultado)
 
 
 # Función imprime una barra de progreso tipo [####------] 40%
@@ -138,10 +137,10 @@ class EscanerGUI:
         for t in threads:
             t.join()
 
-        self.queue_resultados.puit(None) # Señal de fin
+        self.queue_resultados.put(None) # Señal de fin
 
 
-    def escanear_puertos(self, ip, puerto):
+    def escanear_puerto(self, ip, puerto):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock: # socket.socket(): te crea un nuevo objeto de socket, socke.AF_INET: Indica que se esta utilizando la familia de direcciones IPv4 (192.168.0.1), socket.SOCK_STREAM: Esto especifica que el socket sera de tipo STREAMM,osea que utilizara el protocolo tCP (Transmission Control Protocol), el cual proporciona una conexión confiable.
                  sock.settimeout(0.3)
